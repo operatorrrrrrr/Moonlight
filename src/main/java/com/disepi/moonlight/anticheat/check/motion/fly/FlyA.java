@@ -31,9 +31,6 @@ public class FlyA extends Check {
 
         if (e.y < -100) return;
 
-        // GLIDE type check
-        float diffVal = Math.abs(e.y - d.lastY);
-
         if (d.startFallPos == null || !d.hasPlayerLoadedIn() || d.offGroundTicks < 7)
             return; // Do not check if the player has not started falling.
 

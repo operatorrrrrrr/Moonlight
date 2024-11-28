@@ -73,18 +73,18 @@ public class onPlayerSendPacket implements Listener {
             return;
         }
 
-        // Called upon a player moves (when a MovePlayerPacket gets received).
-        // I did not hook the PlayerMove event because it delayed movements to the next server tick;
-        // For example: a player could possibly move twice in a single server tick and the
-        // checks will false flag. This is not ideal and all information about the player's
-        // movement should be accurate otherwise it can cause issues with the checks.
-        if ((event.getPacket() instanceof MovePlayerPacket)) // If the received packet isn't MovePlayerPacket then we don't want it right now
+        // operator: The client is never going to send this packet when the server is in server auth movement mode
+        if ((event.getPacket() instanceof MovePlayerPacket)) {
+            _punish(player);
+        }
+
+        if ((event.getPacket() instanceof PlayerAuthInputPacket))
         {
             // Get and store packet info
-            MovePlayerPacket packet = (MovePlayerPacket) event.getPacket();
-            float x = packet.x;
-            float y = packet.y;
-            float z = packet.z;
+            PlayerAuthInputPacket packet = (PlayerAuthInputPacket) event.getPacket();
+            float x = packet.getPosition().x;
+            float y = packet.getPosition().y;
+            float z = packet.getPosition().z;
 
             // Set data
             data.moveTicks++;
@@ -143,19 +143,25 @@ public class onPlayerSendPacket implements Listener {
             data.lerpTicks--; // Decrease lerp ticks
 
             // View vector calculation
-            double cYaw = (packet.yaw + 90.0) * MotionUtils.DEG;
-            double cPitch = packet.pitch * -MotionUtils.DEG;
+            double cYaw = (packet.getYaw() + 90.0) * MotionUtils.DEG;
+            double cPitch = packet.getPitch() * -MotionUtils.DEG;
             data.viewVector = new Vector3(Math.cos(cYaw), Math.sin(cPitch), Math.sin(cYaw));
 
-            // Check whether we are actually standing on a block
             Block block = WorldUtils.getNearestSolidBlock(x, y, z, player.level, 1.0f); // Retrieve nearest solid block
             Block blockAboveNearestBlock = WorldUtils.getBlock(player.level, (int) block.x, (int) block.y + 1, (int) block.z);
-            data.onGround = !(block instanceof BlockAir) && block.isSolid(); // Set on ground if block is not air (solid)
+//            data.onGround = !(block instanceof BlockAir) && block.isSolid(); // Set on ground if block is not air (solid)
+//
+//            if (!Util.isRoughlyEqual(packet.y % 0.015625f, 0.010627747f, 0.00001f) || !packet.onGround)
+//                data.onGround = false;
+//
+//            packet.onGround = data.onGround; // Our information is more accurate - we do NOT trust the client with the onGround value located inside the packet.
 
-            if (!Util.isRoughlyEqual(packet.y % 0.015625f, 0.010627747f, 0.00001f) || !packet.onGround)
-                data.onGround = false;
+            var currentPos = event.getPlayer().getPosition();
 
-            packet.onGround = data.onGround; // Our information is more accurate - we do NOT trust the client with the onGround value located inside the packet.
+            Block blockBelow = WorldUtils.getBlock(player.level, (int) currentPos.x, (int) currentPos.y - 1, (int) currentPos.z);
+
+            data.onGround = blockBelow.isSolid();
+            Util.log(String.format("onGround? %s", data.onGround));
 
             // Collision
             float expand = 1.25f;
@@ -258,8 +264,8 @@ public class onPlayerSendPacket implements Listener {
             data.lastX = x;
             data.lastY = y;
             data.lastZ = z;
-            data.lastPitch = packet.pitch;
-            data.lastYaw = packet.yaw;
+            data.lastPitch = packet.getPitch();
+            data.lastYaw = packet.getYaw();
         }
     }
 }

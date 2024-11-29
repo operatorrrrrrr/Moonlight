@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.MovePlayerPacket;
+import cn.nukkit.network.protocol.PlayerAuthInputPacket;
 import com.disepi.moonlight.anticheat.check.Check;
 import com.disepi.moonlight.anticheat.player.PlayerData;
 import com.disepi.moonlight.utils.FakePlayer;
@@ -41,7 +42,7 @@ public class KillauraB extends Check {
     }
 
     // Our move callback
-    public void check(MovePlayerPacket e, PlayerData d, Player p) {
+    public void check(PlayerAuthInputPacket e, PlayerData d, Player p) {
         if (d.fake == null)
             return; // If the fake player does not exist for the player, we don't need to adjust it, so return.
         d.fake.ticks++; // Increment the amount of ticks the fake player has existed for

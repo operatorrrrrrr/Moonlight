@@ -25,8 +25,8 @@ public class Main extends PluginBase {
 
         // Game event listeners
         PluginManager mgr = getServer().getPluginManager();
-        mgr.registerEvents(new onPlayerSendPacket(), this);
         mgr.registerEvents(new onPlayerJoin(), this);
+        mgr.registerEvents(new onPlayerSendPacket(), this);
         mgr.registerEvents(new onPlayerAttackEntity(), this);
         mgr.registerEvents(new onPlayerDamage(), this);
         mgr.registerEvents(new onPlayerMovedWrongly(), this);

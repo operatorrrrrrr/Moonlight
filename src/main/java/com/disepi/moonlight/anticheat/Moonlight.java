@@ -8,7 +8,11 @@ import com.disepi.moonlight.anticheat.check.combat.killaura.KillauraB;
 import com.disepi.moonlight.anticheat.check.exploit.badpackets.BadPackets;
 import com.disepi.moonlight.anticheat.check.exploit.noswing.NoSwing;
 import com.disepi.moonlight.anticheat.check.exploit.timer.Timer;
+import com.disepi.moonlight.anticheat.check.motion.fly.FlyA;
 import com.disepi.moonlight.anticheat.check.motion.speed.SpeedA;
+import com.disepi.moonlight.anticheat.check.motion.speed.SpeedB;
+import com.disepi.moonlight.anticheat.check.motion.speed.SpeedC;
+import com.disepi.moonlight.anticheat.check.motion.speed.SpeedD;
 import com.disepi.moonlight.anticheat.check.player.scaffold.ScaffoldA;
 import com.disepi.moonlight.anticheat.check.player.scaffold.ScaffoldB;
 import com.disepi.moonlight.anticheat.player.PlayerData;
@@ -35,10 +39,10 @@ public class Moonlight {
         checks.clear();
 
         checks.add(new SpeedA());
-        //checks.add(new SpeedB());
-        //checks.add(new SpeedC());
-        //checks.add(new SpeedD());
-        //checks.add(new FlyA());
+        checks.add(new SpeedB());
+        checks.add(new SpeedC());
+        // checks.add(new SpeedD());
+        checks.add(new FlyA());
         checks.add(new KillauraA());
         checks.add(new KillauraB());
         checks.add(new ScaffoldA());
@@ -55,8 +59,7 @@ public class Moonlight {
 
     // Inserts a data instance for the target player
     public static void addData(Player player) {
-        if (!player.isOp())
-            Moonlight.players.put(player, new PlayerData(player));
+        Moonlight.players.put(player, new PlayerData(player));
     }
 
     // Removes a data instance for the target player

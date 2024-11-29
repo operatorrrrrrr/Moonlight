@@ -43,7 +43,7 @@ public class Util {
     public static NetworkStackLatencyPacket getStackLatency(long ms) {
         NetworkStackLatencyPacket stack = new NetworkStackLatencyPacket();
         stack.timestamp = ms;
-        stack.unknownBool = true; // "needResponse" or "sendBack"
+        stack.fromServer = true;
         return stack;
     }
 

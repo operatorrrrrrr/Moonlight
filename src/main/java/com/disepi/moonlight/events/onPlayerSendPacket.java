@@ -29,7 +29,9 @@ public class onPlayerSendPacket implements Listener {
     public void onPlayerPacketSend(DataPacketReceiveEvent event) {
         Player player = event.getPlayer(); // Get the player instance from the packet
         PlayerData data = Moonlight.getData(event.getPlayer());
-        if (data == null) return;
+        if (data == null) {
+            return;
+        }
 
         // InteractPacket receive
         if ((event.getPacket() instanceof InteractPacket)) {
@@ -160,8 +162,16 @@ public class onPlayerSendPacket implements Listener {
 
             Block blockBelow = WorldUtils.getBlock(player.level, (int) currentPos.x, (int) currentPos.y - 1, (int) currentPos.z);
 
-            data.onGround = blockBelow.isSolid();
-            Util.log(String.format("onGround? %s", data.onGround));
+            var groundState = blockBelow instanceof BlockAir;
+
+            // You're always (technically) be on the ground if you're inside of a block or water
+            if (
+                    event.getPlayer().isInsideOfSolid() ||
+                    event.getPlayer().isInsideOfWater()
+            ) groundState = true;
+
+            data.onGround = groundState;
+            //Util.log(String.format("onGround? %s", data.onGround));
 
             // Collision
             float expand = 1.25f;
@@ -209,7 +219,7 @@ public class onPlayerSendPacket implements Listener {
             // Cycles through and runs Moonlight's checks.
             if (player.gamemode != 1 && player.isAlive()) { // TODO: Implement this better and create creative mode specific checks or adjust checks to fit creative mode's movements. Creative mode has movement mechanics such as flying which can false flag a lot of checks.
                 for (Check check : Moonlight.checks) { // Loop through all checks in Moonlight's list
-                    check.check(packet, data, player); // Call the check function that wants a MovePlayerPacket
+                    check.check(packet, data, player); // Call the check function that wants a PlayerAuthInput
                 }
             }
 

@@ -13,7 +13,7 @@ public class SpeedD extends Check {
         super("SpeedD", "Invalid vertical jump movement", 8);
     }
 
-    public void doFailCheck(Player p, PlayerData d, float value, float expected) {
+    private void doFailCheck(Player p, PlayerData d, float value, float expected) {
         fail(p, "height=" + value + ", expected=" + expected + ", offGroundTicks=" + d.offGroundTicks);
         lagback(p, d);
         violate(p, d, 1, true);
@@ -21,6 +21,9 @@ public class SpeedD extends Check {
 
     public void check(PlayerAuthInputPacket e, PlayerData d, Player p) {
         reward(d, 0.25f); // Violate
+
+        // fixes a teleport loop
+        if (p.ticksLived < (20 * 5)) return;
 
         boolean hasJumpBoost = d.isJumpBoostActive();
 
@@ -35,7 +38,6 @@ public class SpeedD extends Check {
             }
             doFailCheck(p, d, value, 0);
         }
-
     }
 
 }

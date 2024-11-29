@@ -1,7 +1,6 @@
 package com.disepi.moonlight.anticheat.check.motion.speed;
 
 import cn.nukkit.Player;
-import cn.nukkit.network.protocol.MovePlayerPacket;
 import cn.nukkit.network.protocol.PlayerAuthInputPacket;
 import com.disepi.moonlight.anticheat.check.Check;
 import com.disepi.moonlight.anticheat.player.PlayerData;

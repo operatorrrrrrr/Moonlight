@@ -1,7 +1,7 @@
 <h3 align="center">🌙</h3>
 <h1 align="center">moonlight</h1>
 
-#### This is a continuation of the original moonlight repository.
+#### This is a continuation of the original moonlight repository. All credit goes to disepi
 
 Moonlight is an anticheat for Nukkit designed to prevent cheating. It is still in early stages of development and, at the moment, alot of checks are not implemented or do not work properly.
 

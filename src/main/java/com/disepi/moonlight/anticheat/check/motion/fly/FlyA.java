@@ -2,9 +2,11 @@ package com.disepi.moonlight.anticheat.check.motion.fly;
 
 import cn.nukkit.Player;
 import cn.nukkit.network.protocol.MovePlayerPacket;
+import cn.nukkit.network.protocol.PlayerAuthInputPacket;
 import com.disepi.moonlight.anticheat.check.Check;
 import com.disepi.moonlight.anticheat.player.PlayerData;
 import com.disepi.moonlight.utils.MotionUtils;
+import com.disepi.moonlight.utils.Util;
 
 public class FlyA extends Check {
     // Constructor
@@ -26,18 +28,17 @@ public class FlyA extends Check {
         }
     }
 
-    public void check(MovePlayerPacket e, PlayerData d, Player p) {
+    public void check(PlayerAuthInputPacket e, PlayerData d, Player p) {
         reward(d, 0.025f); // Violation reward
 
-        if (e.y < -100) return;
+        var y = e.getPosition().y;
 
-        // GLIDE type check
-        float diffVal = Math.abs(e.y - d.lastY);
+        if (y < -100) return;
 
         if (d.startFallPos == null || !d.hasPlayerLoadedIn() || d.offGroundTicks < 7)
             return; // Do not check if the player has not started falling.
 
-        double gravity = d.startFallPos.y - e.y; // Player has started falling, get actual fall distance
+        double gravity = d.startFallPos.y - y; // Player has started falling, get actual fall distance
         double predictedGravity = MotionUtils.getExpectedFallValue(d.offGroundTicks - 8); // Get predicted fall distance by the server
 
         // Gravity prediction

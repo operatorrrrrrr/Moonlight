@@ -16,8 +16,6 @@ import com.disepi.moonlight.utils.Util;
 public class Main extends PluginBase {
     @Override
     public void onEnable() {
-        super.onEnable();//
-
         // Configurations
         saveDefaultConfig();
 
@@ -27,8 +25,8 @@ public class Main extends PluginBase {
 
         // Game event listeners
         PluginManager mgr = getServer().getPluginManager();
-        mgr.registerEvents(new onPlayerSendPacket(), this);
         mgr.registerEvents(new onPlayerJoin(), this);
+        mgr.registerEvents(new onPlayerSendPacket(), this);
         mgr.registerEvents(new onPlayerAttackEntity(), this);
         mgr.registerEvents(new onPlayerDamage(), this);
         mgr.registerEvents(new onPlayerMovedWrongly(), this);
@@ -50,8 +48,6 @@ public class Main extends PluginBase {
 
     @Override
     public void onDisable() {
-        super.onDisable();
-
         // Inform user
         Util.log(TextFormat.GREEN + "Unloading!");
 
@@ -66,10 +62,5 @@ public class Main extends PluginBase {
 
         // Empty the player data list
         Moonlight.players.clear();
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        return super.onCommand(sender, command, label, args);
     }
 }

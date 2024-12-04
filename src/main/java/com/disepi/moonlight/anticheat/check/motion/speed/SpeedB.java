@@ -1,7 +1,7 @@
 package com.disepi.moonlight.anticheat.check.motion.speed;
 
 import cn.nukkit.Player;
-import cn.nukkit.network.protocol.MovePlayerPacket;
+import cn.nukkit.network.protocol.PlayerAuthInputPacket;
 import com.disepi.moonlight.anticheat.check.Check;
 import com.disepi.moonlight.anticheat.player.PlayerData;
 import com.disepi.moonlight.utils.MotionUtils;
@@ -21,10 +21,10 @@ public class SpeedB extends Check {
         violate(p, d, value, true); // Violate
     }
 
-    public void check(MovePlayerPacket e, PlayerData d, Player p) {
+    public void check(PlayerAuthInputPacket e, PlayerData d, Player p) {
         reward(d, 0.05f); // Violation reward
 
-        if (e.y < -100) return;
+        if (e.getPosition().y < -100) return;
 
         if (d.onGround && d.onGroundTicks > 10) // If we are on the ground and speed is too high
         {

@@ -129,18 +129,6 @@ public class PlayerData {
         String message = Moonlight.stylizedChatString + p.getName() + TextFormat.GRAY + " was " + TextFormat.DARK_RED + "punished" + TextFormat.DARK_GRAY + (name != "" ? ". [" + name + "]" : "");
         Moonlight.sendMessageToModerators(p, message);
 
-        // Disconnect packet
-        DisconnectPacket disconnectPacket = new DisconnectPacket();
-        disconnectPacket.hideDisconnectionScreen = false;
-        disconnectPacket.message = Moonlight.kickString;
-        p.dataPacket(disconnectPacket);
-
-        // Packet kick after 1000ms
-        (new Timer()).schedule(new TimerTask() {
-            public void run() {
-                p.kick();
-            }
-        }, 1000L);
+        p.kick(Moonlight.kickString, false);
     }
-
 }
